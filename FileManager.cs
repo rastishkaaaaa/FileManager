@@ -269,5 +269,45 @@ namespace FileManager
                 }
             }
         }
+        public void SearchFilesAndFolders(string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                LoadFilesAndFolders();
+                return;
+            }
+            listView.Items.Clear();
+
+            string query = searchText.ToLower();
+            try
+            {
+                foreach (var dir in Directory.GetDirectories(currentDirectory))
+                {
+                    var info = new DirectoryInfo(dir);
+                    if (info.Name.ToLower().Contains(query))
+                    {
+                        var item = new ListViewItem(info.Name) { ForeColor = Color.Aqua };
+                        item.SubItems.Add(info.LastWriteTime.ToString("dd.MM.yyyy HH:mm"));
+                        item.SubItems.Add("<Dir>");
+                        item.Tag = info;
+                        listView.Items.Add(item);
+
+                    }
+                }
+                foreach (var file in Directory.GetFiles(currentDirectory))
+                {
+                    var info = new FileInfo(file);
+                    if (info.Name.ToLower().Contains(query))
+                    {
+                        var item = new ListViewItem(info.Name);
+                        item.SubItems.Add(info.LastWriteTime.ToString("dd.MM.yyyy HH:mm"));
+                        item.SubItems.Add($"{info.Length:NO} байт");
+                        item.Tag = info;
+                        listView.Items.Add(item);
+                    }
+                }
+            }
+            catch (Exception) { }
+        }
     }
 }

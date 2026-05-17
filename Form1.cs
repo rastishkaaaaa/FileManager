@@ -71,5 +71,21 @@ namespace FileManager
                 fileManager.CurrentDirectory = itemPath;
             }
         }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            fileManager.SearchFilesAndFolders(txtSearch.Text);
+        }
+
+        private void btnResetSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Text = "";
+            fileManager.LoadFilesAndFolders();
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
