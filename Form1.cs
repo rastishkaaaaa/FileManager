@@ -82,13 +82,5 @@ namespace FileManager
             txtSearch.Text = "";
             fileManager.LoadFilesAndFolders();
         }
-<<<<<<< HEAD
-=======
-
-        private void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-
-        }
->>>>>>> bd49e75c75965ee2eaeb048acb8367823370e973
     }
 }
