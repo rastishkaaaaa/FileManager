@@ -49,10 +49,17 @@
             this.listViewFiles.FullRowSelect = true;
             this.listViewFiles.GridLines = true;
             this.listViewFiles.HideSelection = false;
+<<<<<<< HEAD
             this.listViewFiles.Location = new System.Drawing.Point(18, 73);
             this.listViewFiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listViewFiles.Name = "listViewFiles";
             this.listViewFiles.Size = new System.Drawing.Size(1138, 417);
+=======
+            this.listViewFiles.Location = new System.Drawing.Point(18, 75);
+            this.listViewFiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.listViewFiles.Name = "listViewFiles";
+            this.listViewFiles.Size = new System.Drawing.Size(1138, 402);
+>>>>>>> bd49e75c75965ee2eaeb048acb8367823370e973
             this.listViewFiles.TabIndex = 0;
             this.listViewFiles.UseCompatibleStateImageBehavior = false;
             this.listViewFiles.View = System.Windows.Forms.View.Details;
@@ -153,9 +160,15 @@
             // 
             // btnResetSearch
             // 
+<<<<<<< HEAD
             this.btnResetSearch.Location = new System.Drawing.Point(855, 15);
             this.btnResetSearch.Name = "btnResetSearch";
             this.btnResetSearch.Size = new System.Drawing.Size(154, 37);
+=======
+            this.btnResetSearch.Location = new System.Drawing.Point(854, 30);
+            this.btnResetSearch.Name = "btnResetSearch";
+            this.btnResetSearch.Size = new System.Drawing.Size(142, 37);
+>>>>>>> bd49e75c75965ee2eaeb048acb8367823370e973
             this.btnResetSearch.TabIndex = 12;
             this.btnResetSearch.Text = "Сбросить поиск ";
             this.btnResetSearch.UseVisualStyleBackColor = true;
@@ -163,7 +176,11 @@
             // 
             // btnSearch
             // 
+<<<<<<< HEAD
             this.btnSearch.Location = new System.Drawing.Point(718, 15);
+=======
+            this.btnSearch.Location = new System.Drawing.Point(717, 30);
+>>>>>>> bd49e75c75965ee2eaeb048acb8367823370e973
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(131, 37);
             this.btnSearch.TabIndex = 11;
@@ -173,10 +190,18 @@
             // 
             // txtSearch
             // 
+<<<<<<< HEAD
             this.txtSearch.Location = new System.Drawing.Point(18, 20);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(694, 26);
             this.txtSearch.TabIndex = 10;
+=======
+            this.txtSearch.Location = new System.Drawing.Point(17, 35);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(694, 26);
+            this.txtSearch.TabIndex = 10;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+>>>>>>> bd49e75c75965ee2eaeb048acb8367823370e973
             // 
             // Form1
             // 
