@@ -1,122 +1,313 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace FileManager
 {
     public class FileManager
     {
-        private string currentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private ListView listView;
+        private string currentDirectory;
 
         public FileManager(ListView listView)
         {
             this.listView = listView;
-            LoadFilesAndFolders();
+            this.currentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        }
+
+        public string CurrentDirectory
+        {
+            get => currentDirectory;
+            set
+            {
+                if (Directory.Exists(value))
+                {
+                    currentDirectory = value;
+                    LoadFilesAndFolders();
+                }
+            }
+        }
+
+        public void GoToParentDirectory()
+        {
+            var parentDir = Directory.GetParent(currentDirectory);
+            if (parentDir != null)
+            {
+                currentDirectory = parentDir.FullName;
+                LoadFilesAndFolders();
+            }
+        }
+
+        public bool CanGoUp()
+        {
+            return Directory.GetParent(currentDirectory) != null;
         }
 
         public void LoadFilesAndFolders()
         {
             listView.Items.Clear();
+
+            if (!Directory.Exists(currentDirectory))
+                return;
+
+            // Добавляем ".." для перехода в родительскую папку
+            var parentDir = Directory.GetParent(currentDirectory);
+            if (parentDir != null)
+            {
+                var upItem = new ListViewItem("..")
+                {
+                    ForeColor = Color.Gray,
+                    Font = new Font(listView.Font, FontStyle.Italic)
+                };
+                upItem.SubItems.Add("-");
+                upItem.SubItems.Add("<НАЗАД>");
+                upItem.Tag = "PARENT_DIRECTORY";
+                listView.Items.Add(upItem);
+            }
+
             try
             {
-                var files = Directory.GetFiles(currentDirectory);
-                var dirs = Directory.GetDirectories(currentDirectory);
-
-                foreach (var dir in dirs)
+                // Загрузка папок (синим цветом)
+                foreach (var dir in Directory.GetDirectories(currentDirectory))
                 {
-                    var dirInfo = new DirectoryInfo(dir);
-                    listView.Items.Add(new ListViewItem(new[] { dirInfo.Name, dirInfo.LastWriteTime.ToString(), "Папка" })
-                    { ForeColor = System.Drawing.Color.Blue });
+                    var info = new DirectoryInfo(dir);
+                    var item = new ListViewItem(Path.GetFileName(dir)) { ForeColor = Color.Blue };
+                    item.SubItems.Add(info.LastWriteTime.ToString("dd.MM.yyyy HH:mm"));
+                    item.SubItems.Add("<DIR>");
+                    item.Tag = info;
+                    listView.Items.Add(item);
                 }
-                foreach (var file in files)
+
+                // Загрузка файлов
+                foreach (var file in Directory.GetFiles(currentDirectory))
                 {
-                    var fileInfo = new FileInfo(file);
-                    listView.Items.Add(new ListViewItem(new[] { fileInfo.Name, fileInfo.LastWriteTime.ToString(), fileInfo.Length.ToString() }));
+                    var info = new FileInfo(file);
+                    var item = new ListViewItem(Path.GetFileName(file));
+                    item.SubItems.Add(info.LastWriteTime.ToString("dd.MM.yyyy HH:mm"));
+                    item.SubItems.Add($"{info.Length:N0} байт");
+                    item.Tag = info;
+                    listView.Items.Add(item);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
+                // Игнорируем ошибки доступа
             }
         }
 
         public void CreateFile()
         {
-            using (var dialog = new SaveFileDialog())
+            using (var dialog = new FileNameDialog("Создание файла"))
             {
-                dialog.InitialDirectory = currentDirectory;
-                dialog.Title = "Создать файл";
-                dialog.Filter = "Текстовые файлы (*.txt)|*.txt";
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK && dialog.IsSaveConfirmed)
                 {
-                    File.Create(dialog.FileName).Dispose();
-                    LoadFilesAndFolders();
+                    var result = FileNameValidator.Validate(dialog.FileName, currentDirectory);
+
+                    if (!result.IsValid)
+                    {
+                        if (result.IsConflict)
+                        {
+                            if (UIManager.ShowConfirmation(result.Message))
+                            {
+                                // Пользователь согласился на замену
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            UIManager.ShowError(result.Message);
+                            return;
+                        }
+                    }
+
+                    try
+                    {
+                        var path = Path.Combine(currentDirectory, dialog.FileName);
+                        File.Create(path).Close();
+                        LoadFilesAndFolders();
+                        UIManager.ShowSuccess("Файл успешно создан");
+                    }
+                    catch (Exception ex)
+                    {
+                        UIManager.ShowError($"Ошибка создания файла: {ex.Message}");
+                    }
                 }
             }
         }
 
-        public void DeleteSelected()
+        public void DeleteFile()
         {
-            if (listView.SelectedItems.Count == 0)
+            if (!UIManager.IsItemSelected(listView))
             {
-                MessageBox.Show("Выберите файл или папку для удаления.");
+                UIManager.ShowError("Выберите элемент для удаления");
                 return;
             }
-            string name = listView.SelectedItems[0].Text;
-            string fullPath = Path.Combine(currentDirectory, name);
+
+            var selectedItem = UIManager.GetSelectedItem(listView);
+
+            // Проверка на элемент ".."
+            if (selectedItem.Tag?.ToString() == "PARENT_DIRECTORY")
+            {
+                UIManager.ShowError("Выберите элемент для удаления");
+                return;
+            }
+
+            var itemName = selectedItem.Text;
+            var itemPath = Path.Combine(currentDirectory, itemName);
+
+            if (!UIManager.ShowConfirmation("Вы действительно хотите удалить выбранный элемент?"))
+            {
+                return;
+            }
+
             try
             {
-                if (File.Exists(fullPath))
-                    File.Delete(fullPath);
-                else if (Directory.Exists(fullPath))
-                    Directory.Delete(fullPath, true);
+                if (File.Exists(itemPath))
+                {
+                    File.Delete(itemPath);
+                }
+                else if (Directory.Exists(itemPath))
+                {
+                    Directory.Delete(itemPath, true);
+                }
+
                 LoadFilesAndFolders();
+                UIManager.ShowSuccess("Файл успешно удалён");
             }
-            catch (Exception ex) { MessageBox.Show($"Ошибка: {ex.Message}"); }
+            catch (Exception ex)
+            {
+                UIManager.ShowError($"Ошибка удаления: {ex.Message}");
+            }
         }
 
-        public void RenameSelected()
+        public void RenameFile()
         {
-            if (listView.SelectedItems.Count == 0) return;
-            string oldName = listView.SelectedItems[0].Text;
-            string oldPath = Path.Combine(currentDirectory, oldName);
-            using (var dialog = new SaveFileDialog())
+            if (!UIManager.IsItemSelected(listView))
             {
-                dialog.InitialDirectory = currentDirectory;
-                dialog.Title = "Переименовать";
-                dialog.FileName = oldName;
-                if (dialog.ShowDialog() == DialogResult.OK)
+                UIManager.ShowError("Выберите элемент для переименования!");
+                return;
+            }
+
+            var selectedItem = UIManager.GetSelectedItem(listView);
+
+            // Проверка на элемент ".."
+            if (selectedItem.Tag?.ToString() == "PARENT_DIRECTORY")
+            {
+                UIManager.ShowError("Выберите элемент для переименования!");
+                return;
+            }
+
+            var oldName = selectedItem.Text;
+            var oldPath = Path.Combine(currentDirectory, oldName);
+
+            using (var dialog = new FileNameDialog("Переименование файла", oldName))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK && dialog.IsSaveConfirmed)
                 {
-                    string newPath = dialog.FileName;
-                    if (File.Exists(oldPath))
+                    var result = FileNameValidator.Validate(dialog.FileName, currentDirectory);
+
+                    if (!result.IsValid)
+                    {
+                        if (result.IsConflict)
+                        {
+                            if (!UIManager.ShowConfirmation(result.Message))
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            UIManager.ShowError(result.Message);
+                            return;
+                        }
+                    }
+
+                    try
+                    {
+                        var newPath = Path.Combine(currentDirectory, dialog.FileName);
                         File.Move(oldPath, newPath);
-                    else if (Directory.Exists(oldPath))
-                        Directory.Move(oldPath, newPath);
-                    LoadFilesAndFolders();
+                        LoadFilesAndFolders();
+                        UIManager.ShowSuccess("Файл успешно переименован");
+                    }
+                    catch (Exception ex)
+                    {
+                        UIManager.ShowError($"Ошибка переименования: {ex.Message}");
+                    }
                 }
             }
-        }
-
-        public void SortByDate()
-        {
-            // Реализация сортировки по дате (оставлена как в примере)
-            var items = listView.Items.Cast<ListViewItem>()
-                .OrderBy(item => DateTime.Parse(item.SubItems[1].Text)).ToList();
-            listView.Items.Clear();
-            listView.Items.AddRange(items.ToArray());
         }
 
         public void SortByName()
         {
-            var items = listView.Items.Cast<ListViewItem>()
-                .OrderBy(item => item.Text).ToList();
+            listView.ListViewItemSorter = new ListViewItemComparer(0, SortOrder.Ascending);
+            listView.Sort();
+        }
+
+        public void SortByDate()
+        {
+            listView.ListViewItemSorter = new ListViewItemComparer(1, SortOrder.Ascending);
+            listView.Sort();
+        }
+
+        public void SelectDirectory()
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                dialog.SelectedPath = currentDirectory;
+                dialog.Description = "Выберите папку для просмотра";
+                dialog.ShowNewFolderButton = false;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    currentDirectory = dialog.SelectedPath;
+                    LoadFilesAndFolders();
+                }
+            }
+        }
+        public void SearchFilesAndFolders(string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                LoadFilesAndFolders();
+                return;
+            }
             listView.Items.Clear();
-            listView.Items.AddRange(items.ToArray());
+
+            string query = searchText.ToLower();
+            try
+            {
+                foreach (var dir in Directory.GetDirectories(currentDirectory))
+                {
+                    var info = new DirectoryInfo(dir);
+                    if (info.Name.ToLower().Contains(query))
+                    {
+                        var item = new ListViewItem(info.Name) { ForeColor = Color.Aqua };
+                        item.SubItems.Add(info.LastWriteTime.ToString("dd.MM.yyyy HH:mm"));
+                        item.SubItems.Add("<Dir>");
+                        item.Tag = info;
+                        listView.Items.Add(item);
+
+                    }
+                }
+                foreach (var file in Directory.GetFiles(currentDirectory))
+                {
+                    var info = new FileInfo(file);
+                    if (info.Name.ToLower().Contains(query))
+                    {
+                        var item = new ListViewItem(info.Name);
+                        item.SubItems.Add(info.LastWriteTime.ToString("dd.MM.yyyy HH:mm"));
+                        item.SubItems.Add($"{info.Length:NO} байт");
+                        item.Tag = info;
+                        listView.Items.Add(item);
+                    }
+                }
+            }
+            catch (Exception) { }
         }
     }
 }

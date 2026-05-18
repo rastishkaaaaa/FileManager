@@ -52,7 +52,13 @@ namespace FileManagerTests
 
             fileManager.LoadFilesAndFolders();
 
-            Assert.AreEqual(2, listView.Items.Count);
+            // Ожидаем 3 элемента: ".." (родительская папка), "SubDir", "test.txt"
+            Assert.AreEqual(3, listView.Items.Count);
+
+            // Проверяем, что ".." есть первым элементом
+            Assert.AreEqual("..", listView.Items[0].Text);
+
+            // Проверяем наличие созданных элементов (игнорируя "..")
             Assert.IsTrue(listView.Items.Cast<ListViewItem>().Any(item => item.Text == "SubDir"));
             Assert.IsTrue(listView.Items.Cast<ListViewItem>().Any(item => item.Text == "test.txt"));
         }
@@ -61,7 +67,10 @@ namespace FileManagerTests
         public void LoadFilesAndFolders_WhenDirectoryEmpty_ShouldShowNothing()
         {
             fileManager.LoadFilesAndFolders();
-            Assert.AreEqual(0, listView.Items.Count);
+
+            // В пустой директории остаётся только элемент ".."
+            Assert.AreEqual(1, listView.Items.Count);
+            Assert.AreEqual("..", listView.Items[0].Text);
         }
     }
 }

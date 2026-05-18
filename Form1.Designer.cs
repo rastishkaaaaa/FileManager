@@ -2,15 +2,18 @@
 {
     partial class Form1
     {
-        /// <summary>
-        /// Обязательная переменная конструктора.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.ListView listViewFiles;
+        private System.Windows.Forms.ColumnHeader colName;
+        private System.Windows.Forms.ColumnHeader colDate;
+        private System.Windows.Forms.ColumnHeader colSize;
+        private System.Windows.Forms.Button btnCreateFile;
+        private System.Windows.Forms.Button btnRename;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnSortByDate;
+        private System.Windows.Forms.Button btnSortByName;
+        private System.Windows.Forms.Button btnBrowse;
 
-        /// <summary>
-        /// Освободить все используемые ресурсы.
-        /// </summary>
-        /// <param name="disposing">истинно, если управляемый ресурс должен быть удален; иначе ложно.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,133 +23,186 @@
             base.Dispose(disposing);
         }
 
-        #region Код, автоматически созданный конструктором форм Windows
-
-        /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте 
-        /// содержимое этого метода с помощью редактора кода.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.buttonSortName = new System.Windows.Forms.Button();
-            this.buttonSortDate = new System.Windows.Forms.Button();
-            this.buttonRename = new System.Windows.Forms.Button();
-            this.buttonDelete = new System.Windows.Forms.Button();
-            this.buttonCreate = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listViewFiles = new System.Windows.Forms.ListView();
+            this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnCreateFile = new System.Windows.Forms.Button();
+            this.btnRename = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnSortByDate = new System.Windows.Forms.Button();
+            this.btnSortByName = new System.Windows.Forms.Button();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.btnResetSearch = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.txtSearch = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // buttonSortName
+            // listViewFiles
             // 
-            this.buttonSortName.Location = new System.Drawing.Point(406, 366);
-            this.buttonSortName.Name = "buttonSortName";
-            this.buttonSortName.Size = new System.Drawing.Size(273, 35);
-            this.buttonSortName.TabIndex = 12;
-            this.buttonSortName.Text = "Сортировать по имени ";
-            this.buttonSortName.UseVisualStyleBackColor = true;
-            this.buttonSortName.Click += new System.EventHandler(this.buttonSortName_Click);
+            this.listViewFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colName,
+            this.colDate,
+            this.colSize});
+            this.listViewFiles.FullRowSelect = true;
+            this.listViewFiles.GridLines = true;
+            this.listViewFiles.HideSelection = false;
+            this.listViewFiles.Location = new System.Drawing.Point(18, 73);
+            this.listViewFiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.listViewFiles.Name = "listViewFiles";
+            this.listViewFiles.Size = new System.Drawing.Size(1138, 417);
+            this.listViewFiles.TabIndex = 0;
+            this.listViewFiles.UseCompatibleStateImageBehavior = false;
+            this.listViewFiles.View = System.Windows.Forms.View.Details;
+            this.listViewFiles.DoubleClick += new System.EventHandler(this.listViewFiles_DoubleClick);
             // 
-            // buttonSortDate
+            // colName
             // 
-            this.buttonSortDate.Location = new System.Drawing.Point(129, 366);
-            this.buttonSortDate.Name = "buttonSortDate";
-            this.buttonSortDate.Size = new System.Drawing.Size(258, 35);
-            this.buttonSortDate.TabIndex = 11;
-            this.buttonSortDate.Text = "Сортировать по дате ";
-            this.buttonSortDate.UseVisualStyleBackColor = true;
-            this.buttonSortDate.Click += new System.EventHandler(this.buttonSortDate_Click);
+            this.colName.Text = "Имя";
+            this.colName.Width = 300;
             // 
-            // buttonRename
+            // colDate
             // 
-            this.buttonRename.Location = new System.Drawing.Point(320, 323);
-            this.buttonRename.Name = "buttonRename";
-            this.buttonRename.Size = new System.Drawing.Size(183, 35);
-            this.buttonRename.TabIndex = 10;
-            this.buttonRename.Text = "Переименовать ";
-            this.buttonRename.UseVisualStyleBackColor = true;
-            this.buttonRename.Click += new System.EventHandler(this.buttonRename_Click);
+            this.colDate.Text = "Дата измен...";
+            this.colDate.Width = 200;
             // 
-            // buttonDelete
+            // colSize
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(528, 323);
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(151, 35);
-            this.buttonDelete.TabIndex = 9;
-            this.buttonDelete.Text = "Удалить";
-            this.buttonDelete.UseVisualStyleBackColor = true;
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            this.colSize.Text = "Размер/Тип";
+            this.colSize.Width = 150;
             // 
-            // buttonCreate
+            // btnCreateFile
             // 
-            this.buttonCreate.Location = new System.Drawing.Point(129, 323);
-            this.buttonCreate.Name = "buttonCreate";
-            this.buttonCreate.Size = new System.Drawing.Size(162, 35);
-            this.buttonCreate.TabIndex = 8;
-            this.buttonCreate.Text = "Создать файл ";
-            this.buttonCreate.UseVisualStyleBackColor = true;
-            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
+            this.btnCreateFile.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnCreateFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnCreateFile.Location = new System.Drawing.Point(93, 500);
+            this.btnCreateFile.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnCreateFile.Name = "btnCreateFile";
+            this.btnCreateFile.Size = new System.Drawing.Size(225, 54);
+            this.btnCreateFile.TabIndex = 1;
+            this.btnCreateFile.Text = "Создать";
+            this.btnCreateFile.UseVisualStyleBackColor = true;
+            this.btnCreateFile.Click += new System.EventHandler(this.btnCreateFile_Click);
             // 
-            // listView1
+            // btnRename
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(78, 49);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(644, 268);
-            this.listView1.TabIndex = 7;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.btnRename.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnRename.Location = new System.Drawing.Point(348, 500);
+            this.btnRename.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(225, 54);
+            this.btnRename.TabIndex = 2;
+            this.btnRename.Text = "Переименовать";
+            this.btnRename.UseVisualStyleBackColor = true;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
             // 
-            // columnHeader1
+            // btnDelete
             // 
-            this.columnHeader1.Text = "Имя";
-            this.columnHeader1.Width = 200;
+            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnDelete.Location = new System.Drawing.Point(603, 500);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(225, 54);
+            this.btnDelete.TabIndex = 3;
+            this.btnDelete.Text = "Удалить";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // columnHeader2
+            // btnSortByDate
             // 
-            this.columnHeader2.Text = "Дата изменения";
-            this.columnHeader2.Width = 120;
+            this.btnSortByDate.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnSortByDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnSortByDate.Location = new System.Drawing.Point(348, 569);
+            this.btnSortByDate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSortByDate.Name = "btnSortByDate";
+            this.btnSortByDate.Size = new System.Drawing.Size(225, 54);
+            this.btnSortByDate.TabIndex = 5;
+            this.btnSortByDate.Text = "Сортировать по дате";
+            this.btnSortByDate.UseVisualStyleBackColor = true;
+            this.btnSortByDate.Click += new System.EventHandler(this.btnSortByDate_Click);
             // 
-            // columnHeader3
+            // btnSortByName
             // 
-            this.columnHeader3.Text = "Размер/Тип";
-            this.columnHeader3.Width = 100;
+            this.btnSortByName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnSortByName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnSortByName.Location = new System.Drawing.Point(603, 569);
+            this.btnSortByName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSortByName.Name = "btnSortByName";
+            this.btnSortByName.Size = new System.Drawing.Size(225, 54);
+            this.btnSortByName.TabIndex = 6;
+            this.btnSortByName.Text = "Сортировать по имени";
+            this.btnSortByName.UseVisualStyleBackColor = true;
+            this.btnSortByName.Click += new System.EventHandler(this.btnSortByName_Click);
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnBrowse.Location = new System.Drawing.Point(858, 500);
+            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(225, 54);
+            this.btnBrowse.TabIndex = 4;
+            this.btnBrowse.Text = "Обзор";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // btnResetSearch
+            // 
+            this.btnResetSearch.Location = new System.Drawing.Point(855, 15);
+            this.btnResetSearch.Name = "btnResetSearch";
+            this.btnResetSearch.Size = new System.Drawing.Size(154, 37);
+            this.btnResetSearch.TabIndex = 12;
+            this.btnResetSearch.Text = "Сбросить поиск ";
+            this.btnResetSearch.UseVisualStyleBackColor = true;
+            this.btnResetSearch.Click += new System.EventHandler(this.btnResetSearch_Click);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(718, 15);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(131, 37);
+            this.btnSearch.TabIndex = 11;
+            this.btnSearch.Text = "Поиск ";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(18, 20);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(694, 26);
+            this.txtSearch.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.buttonSortName);
-            this.Controls.Add(this.buttonSortDate);
-            this.Controls.Add(this.buttonRename);
-            this.Controls.Add(this.buttonDelete);
-            this.Controls.Add(this.buttonCreate);
-            this.Controls.Add(this.listView1);
+            this.ClientSize = new System.Drawing.Size(1176, 632);
+            this.Controls.Add(this.btnResetSearch);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.txtSearch);
+            this.Controls.Add(this.btnSortByName);
+            this.Controls.Add(this.btnSortByDate);
+            this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.btnDelete);
+            this.Controls.Add(this.btnRename);
+            this.Controls.Add(this.btnCreateFile);
+            this.Controls.Add(this.listViewFiles);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "FileManager";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
-        #endregion
-        private System.Windows.Forms.Button buttonSortName;
-        private System.Windows.Forms.Button buttonSortDate;
-        private System.Windows.Forms.Button buttonRename;
-        private System.Windows.Forms.Button buttonDelete;
-        private System.Windows.Forms.Button buttonCreate;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.Button btnResetSearch;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.TextBox txtSearch;
     }
 }
-
